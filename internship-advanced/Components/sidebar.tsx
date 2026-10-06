@@ -2,34 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { initFirebase } from "../app/firebase";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LoginModal from "@/Components/loginModal";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SideBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { user, logout } = useAuth();
   const pathname = usePathname();
+
   const isForYou = pathname === "/For-You";
   const isLibrary = pathname === "/Library";
   const isSettings = pathname === "/Settings";
-  const fire = initFirebase();
-  const auth = getAuth(fire);
   
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return () => unsubscribe();
-  }, [auth]); 
  
   const signIn = () => {
     setIsModalOpen(true);
   };
-  const signOut = () => {
-    auth.signOut();
-    setIsModalOpen(false);
+  const signOut = async () => {
+    try {
+      await logout();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 
 import { Roboto } from "next/font/google";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -14,7 +15,11 @@ const roboto = Roboto({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={roboto.variable}>
-      <body>{children}</body>
+      <body className={roboto.className}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

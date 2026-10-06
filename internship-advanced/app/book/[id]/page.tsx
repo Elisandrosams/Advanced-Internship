@@ -1,18 +1,33 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import LoginModal from "@/Components/loginModal";
 import SideBar from "@/Components/sidebar";
 import SearchBar from "@/Components/searchbar";
 
 export default function getBook() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const { user, subscriptionPlan } = useAuth();
   const params = useParams();
   const bookId = params.id;
   const [book, setBook] = useState<any>([]);
 
+  const handleReadClick = () => {
+    if (user) {
+      router.push(`/player/${params.id}`);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   useEffect(() => {
     if (bookId) {
       const fetchBook = async () => {
-        const response = await fetch(`https://us-central1-summaristt.cloudfunctions.net/getBook?id=${bookId}`);
+        const response = await fetch(
+          `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${bookId}`,
+        );
         const data = await response.json();
         console.log(data);
         setBook(data);
@@ -21,19 +36,24 @@ export default function getBook() {
     }
   }, [bookId]);
 
-
   return (
     <main>
+      <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <SideBar />
       <SearchBar />
-      <div className="max-w-267.5 w-full mx-auto pr-6 pl-56">
-        <div className="w-full py-10">
+      <div className="w-full py-10">
+        <div className="max-w-267.5 w-full mx-auto pr-6 pl-56">
           <div className="flex gap-8 max-[992px]:flex-col max-[992px]:gap-4">
             <div className="w-full max-[992px]:order-1">
               <div className="text-primary mb-4 font-semibold text-[32px]">
-                {book?.title}
+                {book?.title}{" "}
+                {book?.subscriptionRequired && (
+                  <span className="text-primary">(Premium)</span>
+                )}
               </div>
-              <div className="text-primary mb-4 font-semibold">{book?.author}</div>
+              <div className="text-primary mb-4 font-semibold">
+                {book?.author}
+              </div>
               <div className="text-primary mb-4 font-light text-xl">
                 {book?.subTitle}
               </div>
@@ -109,7 +129,21 @@ export default function getBook() {
                 </div>
               </div>
               <div className="flex mb-6 gap-4">
-                <button className="flex items-center justify-center w-36 h-12 bg-primary text-white text-base cursor-pointer rounded-sm gap-2 transition-opacity hover:opacity-80 duration-200">
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      setIsModalOpen(true);
+                    } else if (
+                      subscriptionPlan !== "basic" ||
+                      !book?.subscriptionRequired
+                    ) {
+                      handleReadClick();
+                    } else {
+                      router.push("/choose-plan");
+                    }
+                  }}
+                  className="flex items-center justify-center w-36 h-12 bg-primary text-white text-base cursor-pointer rounded-sm gap-2 transition-opacity hover:opacity-80 duration-200"
+                >
                   <div className="flex">
                     <svg
                       stroke="currentColor"
@@ -124,7 +158,21 @@ export default function getBook() {
                   </div>
                   <div>Read</div>
                 </button>
-                <button className="flex items-center justify-center w-36 h-12 bg-primary text-white text-base cursor-pointer rounded-sm gap-2 transition-opacity hover:opacity-80 duration-200">
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      setIsModalOpen(true);
+                    } else if (
+                      subscriptionPlan !== "basic" ||
+                      !book?.subscriptionRequired
+                    ) {
+                      handleReadClick();
+                    } else {
+                      router.push("/choose-plan");
+                    }
+                  }}
+                  className="flex items-center justify-center w-36 h-12 bg-primary text-white text-base cursor-pointer rounded-sm gap-2 transition-opacity hover:opacity-80 duration-200"
+                >
                   <div className="flex">
                     <svg
                       stroke="currentColor"
@@ -155,13 +203,21 @@ export default function getBook() {
                 </div>
                 <div>Add title to My Library</div>
               </div>
-              <div className="text-lg text-primary mb-4 font-semibold">What's it about?</div>
+              <div className="text-lg text-primary mb-4 font-semibold">
+                What's it about?
+              </div>
               <div className="flex flex-wrap mb-4 gap-4">
-                <div className="bg-[#f1f6f4] flex h-12 items-center cursor-not-allowed text-primary font-medium px-4 rounded">{book?.tags?.[0]}</div>
-                <div className="bg-[#f1f6f4] flex h-12 items-center cursor-not-allowed text-primary font-medium px-4 rounded">{book?.tags?.[1]}</div>
+                <div className="bg-[#f1f6f4] flex h-12 items-center cursor-not-allowed text-primary font-medium px-4 rounded">
+                  {book?.tags?.[0]}
+                </div>
+                <div className="bg-[#f1f6f4] flex h-12 items-center cursor-not-allowed text-primary font-medium px-4 rounded">
+                  {book?.tags?.[1]}
+                </div>
               </div>
               <div className="text-primary mb-4">{book?.bookDescription}</div>
-              <h2 className="text-lg text-primary mb-4 font-semibold">About the author</h2>
+              <h2 className="text-lg text-primary mb-4 font-semibold">
+                About the author
+              </h2>
               <div className="text-primary">{book?.authorDescription}</div>
             </div>
             <div className="max-[992px]:flex max-[992px]:justify-center">

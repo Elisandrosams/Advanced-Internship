@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -21,9 +21,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
   const fire = initFirebase();
   const auth = getAuth(fire);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleSuccessNavigation = () => {
+    onClose();
+    if (pathname === "/") {
+      router.push("/For-You");
+    }
+  };
 
   const signInWithGoogle = async () => {
     setIsLoading(true);
@@ -32,8 +40,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       provider.setCustomParameters({ prompt: "select_account" });
       const result = await signInWithPopup(auth, provider);
       if (result.user) {
-        onClose();
-        router.push("/For-You");
+        handleSuccessNavigation();
       }
     } catch (error) {
       console.error("Google Auth Error:", error);
@@ -45,8 +52,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const signUp = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/For-You");
+      const result =await createUserWithEmailAndPassword(auth, email, password);
+      if (result.user) {
+        handleSuccessNavigation(); 
+      }
     } catch (error) {
       console.error("Email Sign-Up Error:", error);
     } finally {
@@ -60,8 +69,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       if (result.user) {
-        onClose();
-        router.push("/For-You");
+        handleSuccessNavigation();
       }
     } catch (error: any) {
       console.error("Email Auth Error:", error);
@@ -85,8 +93,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         guestPassword,
       );
       if (result.user) {
-        onClose();
-        router.push("/For-You");
+        handleSuccessNavigation();
       }
     } catch (error: any) {
       console.error("Guest Auth Error:", error);

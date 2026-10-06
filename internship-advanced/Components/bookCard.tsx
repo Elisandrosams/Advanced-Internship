@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from '@/context/AuthContext';
 
 interface Book {
   id: string;
@@ -10,17 +11,21 @@ interface Book {
   imageLink: string;
   averageRating?: number;
   audioLink?: string;
+  subscriptionRequired?: boolean;
 }
 
 export default function BookCard({ book }: { book: Book }) {
  
-
+const { user, loading, subscriptionPlan } = useAuth();
   
 
   return (
       <Link 
       href={`/book/${book.id}`}
       className="relative snap-start max-w-50 w-full pt-8 pb-3 px-3 rounded-sm">
+        {subscriptionPlan === 'basic' && book.subscriptionRequired && (
+          <div className="bg-primary w-fit h-4.5 absolute top-0 right-0 text-white text-[10px] flex items-center px-2 rounded-[20px]">Premium</div>
+        )}
         <figure className="w-43 h-43 mb-2">
           <img className="w-full h-full" src={book.imageLink} />
         </figure>
