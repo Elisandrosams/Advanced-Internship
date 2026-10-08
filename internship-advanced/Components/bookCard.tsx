@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from '@/context/AuthContext';
+import { useAudioDuration } from "@/Components/audioDuration";
 
 interface Book {
   id: string;
@@ -17,7 +18,7 @@ interface Book {
 export default function BookCard({ book }: { book: Book }) {
  
 const { user, loading, subscriptionPlan } = useAuth();
-  
+const { duration } = useAudioDuration(book.audioLink);
 
   return (
       <Link 
@@ -47,7 +48,7 @@ const { user, loading, subscriptionPlan } = useAuth();
                 <path d="M13 7h-2v6h6v-2h-4z"></path>
               </svg>
             </div>
-            <div>Length</div>
+            <div>{duration}</div>
           </div>
           <div className="flex items-center text-sm font-light gap-1 text-[#6b757b]">
             <div className="flex w-4 h-4">

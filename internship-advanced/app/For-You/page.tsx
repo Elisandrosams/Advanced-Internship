@@ -3,12 +3,16 @@
 import SideBar from "@/Components/sidebar";
 import SearchBar from "@/Components/searchbar";
 import BookSlider from "@/Components/bookSlider";
+import Link from "next/link";
+import { useAudioDuration } from "@/Components/audioDuration";
 import { useEffect, useState } from "react";
+
 
 export default function ForYou() {
   const [selectedBook, setSelectedBook] = useState<any>({});
    const [recommendedBooks, setRecommendedBooks] = useState<any[]>([]);
    const [suggestedBooks, setSuggestedBooks] = useState<any[]>([]);
+   const { duration } = useAudioDuration(selectedBook.audioLink);
 
   async function getSelectedBook() {
     const response = await fetch(
@@ -53,7 +57,9 @@ export default function ForYou() {
             <div className="text-[22px] font-bold text-primary mb-4">
               Selected just for you
             </div>
-            <a className="flex justify-between w-full bg-[#fbefd6] rounded-sm p-6 mb-6 gap-6">
+            <Link
+            href={`/book/${selectedBook.id}`}
+            className="flex justify-between w-full bg-[#fbefd6] rounded-sm p-6 mb-6 gap-6">
               <div className="text-primary w-2/5">{selectedBook.subTitle}</div>
               <div className="w-px bg-[#bac8ce]"></div>
               <div className="flex gap-4 w-3/5">
@@ -83,12 +89,12 @@ export default function ForYou() {
                       </svg>
                     </div>
                     <div className="text-sm text-primary font-medium">
-                      Length
+                      {duration}
                     </div>
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
             <div>
               <div className="text-[22px] font-bold text-primary mb-4">
                 Recommended for you

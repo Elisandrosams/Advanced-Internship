@@ -29,7 +29,6 @@ export default function getBook() {
           `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${bookId}`,
         );
         const data = await response.json();
-        console.log(data);
         setBook(data);
       };
       fetchBook();
