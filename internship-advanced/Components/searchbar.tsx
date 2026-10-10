@@ -1,4 +1,48 @@
+"use client";
+import { useState, useEffect } from "react";
+import SearchSlides from "./searchSlides";
+
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  imageLink: string;
+  audioLink: string;
+}
+
 export default function SearchBar() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+    const delayDebounce = setTimeout(async () => {
+      
+      try {
+        const response = await fetch(
+          `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${encodeURIComponent(searchQuery)}`,
+        );
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error("No books found", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
+
   return (
     <div className="border-[#e1e7ea] border h-20 z-1">
       <div className="relative flex items-center justify-between h-full px-8 mx-auto max-w-267.5">
@@ -9,6 +53,8 @@ export default function SearchBar() {
               <input
                 type="text"
                 placeholder="Search for books"
+                value={searchQuery}
+                onChange={handleSearchChange}
                 className="w-full h-10 border border-[#e1e7ea] bg-[#f1f6f4] rounded-lg px-4 text-[13px]  text-primary outline-hidden"
               />
               <div className="flex absolute items-center h-full right-2 justify-end pl-2 border-l-[#e1e7ea] border-l text-primary">
@@ -25,7 +71,16 @@ export default function SearchBar() {
               </div>
             </div>
           </div>
-          <div></div>
+          <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
+            {searchQuery.trim() &&
+              ( isLoading ? (<></>) : searchResults.length > 0 ? (
+                <SearchSlides books={searchResults} />
+              ) : (
+                <div className="text-[#6b757b] text-sm font-light p-4">
+                  No books found
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>
