@@ -27,7 +27,6 @@ export default function SearchBar() {
     }
     setIsLoading(true);
     const delayDebounce = setTimeout(async () => {
-      
       try {
         const response = await fetch(
           `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${encodeURIComponent(searchQuery)}`,
@@ -71,16 +70,20 @@ export default function SearchBar() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
-            {searchQuery.trim() &&
-              ( isLoading ? (<></>) : searchResults.length > 0 ? (
+          {searchQuery.trim() &&
+            (isLoading ? (
+              <></>
+            ) : searchResults.length > 0 ? (
+              <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
                 <SearchSlides books={searchResults} />
-              ) : (
-                <div className="text-[#6b757b] text-sm font-light p-4">
+              </div>
+            ) : (
+              <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
+                <div className="text-black text-base font-medium p-4">
                   No books found
                 </div>
-              ))}
-          </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
