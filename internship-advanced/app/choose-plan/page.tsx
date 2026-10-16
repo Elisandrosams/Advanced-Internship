@@ -137,6 +137,11 @@ export default function ChoosePlan() {
           <div className="bg-white sticky bottom-0 z-1 py-8 px-0 flex flex-col items-center gap-4">
             <span>
               <button className="bg-highlight text-primary w-75 h-10 rounded text-base transition:bg duration:200 flex items-center justify-center min-w-45 hover:bg-active cursor-pointer"
+              onClick={() => {
+                if (selectedPlan === "yearly") {
+                  window.location.href = "https://buy.stripe.com/test_8x214p51gdTG9KL981fAc01";}
+                else {
+                  window.location.href = "https://buy.stripe.com/test_cNiaEZfFUeXK7CD3NHfAc00"}}}
              >
                 {selectedPlan === "yearly"
                   ? "Start your free 7-day trial"

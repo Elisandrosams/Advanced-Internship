@@ -12,17 +12,14 @@ export default function ForYou() {
   const [recommendedBooks, setRecommendedBooks] = useState<any[]>([]);
   const [suggestedBooks, setSuggestedBooks] = useState<any[]>([]);
   const { duration } = useAudioDuration(selectedBook.audioLink);
-  const [isLoading, setIsLoading] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   async function getSelectedBook() {
-    setIsLoading(true);
     const response = await fetch(
       "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected",
     );
     const data = await response.json();
     setSelectedBook(data[0]);
-    setIsLoading(false);
   }
   useEffect(() => {
     getSelectedBook();
@@ -30,26 +27,22 @@ export default function ForYou() {
 
   useEffect(() => {
     async function fetchRecommendedBooks() {
-      setIsLoading(true);
       const response = await fetch(
         "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended",
       );
       const data = await response.json();
       setRecommendedBooks(data);
-      setIsLoading(false);
     }
     fetchRecommendedBooks();
   }, []);
 
   useEffect(() => {
     async function fetchSuggestedBooks() {
-      setIsLoading(true);
       const response = await fetch(
         "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested",
       );
       const data = await response.json();
       setSuggestedBooks(data);
-      setIsLoading(false);
     }
     fetchSuggestedBooks();
   }, []);
@@ -83,7 +76,7 @@ export default function ForYou() {
                     {selectedBook.imageLink && (
                       <img
                         srcSet={selectedBook.imageLink}
-                        className="h-full w-full"
+                        className={`w-full h-full object-cover ${isImageLoading ? 'hidden' : 'block'}`}
                         onLoad={() => setIsImageLoading(false)}
                       />
                     )}

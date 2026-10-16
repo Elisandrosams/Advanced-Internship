@@ -18,6 +18,7 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
@@ -53,20 +54,20 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
   };
 
   const skipAhead = () => {
-  if (audioRef.current) {
-    const newTime = Math.min(audioRef.current.currentTime + 10, duration);
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-  }
-};
+    if (audioRef.current) {
+      const newTime = Math.min(audioRef.current.currentTime + 10, duration);
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
 
-const skipBack = () => {
-  if (audioRef.current) {
-    const newTime = Math.max(audioRef.current.currentTime - 10, 0);
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-  }
-};
+  const skipBack = () => {
+    if (audioRef.current) {
+      const newTime = Math.max(audioRef.current.currentTime - 10, 0);
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
 
   useEffect(() => {
     setIsPlaying(false);
@@ -92,12 +93,30 @@ const skipBack = () => {
       <div className="flex gap-3 w-[calc(100%/3)]">
         <figure className="flex max-w-12">
           <figure className="w-12 h-12 min-w-12">
-            <img src={book.imageLink} className="w-full h-full" />
+            {isImageLoading && (
+              <div className="w-full h-full bg-gray-300"></div>
+            )}
+            {book.imageLink && (
+              <img
+                src={book.imageLink}
+                className={`w-full h-full object-cover ${isImageLoading ? "hidden" : "block"}`}
+                onLoad={() => setIsImageLoading(false)}
+              />
+            )}
           </figure>
         </figure>
         <div className="flex flex-col justify-center gap-1 text-sm text-white">
-          <div className="font-bold">{book.title}</div>
-          <div className=" text-[#bac8ce]">{book.author}</div>
+          {!book?.title ? (
+            <>
+              <div className="w-25 h-4 mb-2 bg-gray-300"></div>
+              <div className="w-14 h-4 mb-2 bg-gray-300"></div>
+            </>
+          ) : (
+            <>
+              <div className="font-bold">{book.title}</div>
+              <div className=" text-[#bac8ce]">{book.author}</div>
+            </>
+          )}
         </div>
       </div>
       <div className="w-[calc(100%/3)]">

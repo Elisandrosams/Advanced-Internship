@@ -17,11 +17,14 @@ interface Book {
 }
 
 export default function BookCard({ book }: { book: Book }) {
-  const { user, loading, subscriptionPlan } = useAuth();
+  const { subscriptionPlan } = useAuth();
   const { duration } = useAudioDuration(book.audioLink);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
+
   return (
+    <>
+    
     <Link
       href={`/book/${book.id}`}
       className="relative snap-start max-w-50 w-full pt-8 pb-3 px-3 rounded-sm"
@@ -35,7 +38,7 @@ export default function BookCard({ book }: { book: Book }) {
         {isImageLoading && <div className="h-full w-full bg-gray-300"></div>}
         {book.imageLink && (
           <img
-            className="w-full h-full"
+            className={`w-full h-full object-cover ${isImageLoading ? 'hidden' : 'block'}`}
             src={book.imageLink}
             onLoad={() => setIsImageLoading(false)}
           />
@@ -80,5 +83,6 @@ export default function BookCard({ book }: { book: Book }) {
         </div>
       </div>
     </Link>
+    </>
   );
 }
