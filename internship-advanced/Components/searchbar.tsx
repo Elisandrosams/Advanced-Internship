@@ -72,7 +72,16 @@ export default function SearchBar() {
           </div>
           {searchQuery.trim() &&
             (isLoading ? (
-              <></>
+              <>
+                <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center mx-4 mt-4 h-30 border border-[#e1e7ea] bg-gray-300"
+                    ></div>
+                  ))}
+                </div>
+              </>
             ) : searchResults.length > 0 ? (
               <div className="flex flex-col max-w-110 w-full max-h-160 ml-auto overflow-y-auto absolute top-26 right-6 bg-white border border-[#e1e7ea] shadow-[0_0_6px_0_rgba(0,0,0,0.14)] z-60">
                 <SearchSlides books={searchResults} />
