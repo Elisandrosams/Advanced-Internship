@@ -61,9 +61,8 @@ export default function SideBar() {
               </div>
               <div>For you</div>
             </Link>
-            <Link
-              href="/Library"
-              className="flex items-center text-primary h-14 mb-2 cursor-pointer hover:bg-[#f0efef]"
+            <div
+              className="flex items-center text-primary h-14 mb-2 cursor-not-allowed hover:bg-[#f0efef]"
             >
               <div
                 className={`w-1.25 h-full mr-4 transition-colors ${isLibrary ? "bg-highlight" : "bg-transparent"}`}
@@ -81,7 +80,7 @@ export default function SideBar() {
                 </svg>
               </div>
               <div>My Library</div>
-            </Link>
+            </div>
             <div className="flex items-center text-primary h-14 mb-2 cursor-not-allowed hover:bg-[#f0efef]">
               <div className="w-1.25 h-full mr-4"></div>
               <div className="flex items-center justify-center mr-2">

@@ -210,7 +210,7 @@ export default function getBook() {
                       <div>Listen</div>
                     </button>
                   </div>
-                  <div className="flex items-center text-[#0365f2] font-medium cursor-pointer mb-10 text-lg gap-2 hover:text-[#044298] transition-colors duration-200">
+                  <div className="flex items-center text-[#0365f2] font-medium cursor-not-allowed mb-10 text-lg gap-2 hover:text-[#044298] transition-colors duration-200">
                     <div className="flex h-5 w-5">
                       <svg
                         stroke="currentColor"
