@@ -37,7 +37,7 @@ export default function SideBar() {
           <img src="/logo.png" className="w-full h-10" />
         </div>
         <div
-          className={`flex flex-col justify-between pb-5 overflow-y-auto ${isPlayer ? "h-[calc(100vh-140px)]" : "h-[calc(100vh-60px)]"}`}
+          className={`flex flex-col justify-between pb-5 overflow-y-auto ${isPlayer ? "h-[calc(100vh-185px)]" : "h-[calc(100vh-60px)]"}`}
         >
           <div className="mt-10 flex-1">
             <Link

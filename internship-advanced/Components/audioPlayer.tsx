@@ -82,7 +82,7 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
   };
 
   return (
-    <div className="w-full h-20 mt-auto flex items-center justify-between bg-primary px-10 fixed bottom-0 left-0 z-100">
+    <div className="w-full h-40 py-4 mt-auto flex flex-col items-center justify-center bg-primary px-10 fixed bottom-0 left-0 z-100 md:justify-between md:flex-row md:h-20">
       <audio
         ref={audioRef}
         src={book.audioLink}
