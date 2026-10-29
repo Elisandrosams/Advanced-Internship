@@ -3,7 +3,6 @@
 import SideBar from "@/Components/sidebar";
 import SearchBar from "@/Components/searchbar";
 import LoginModal from "@/Components/loginModal";
-
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
@@ -14,7 +13,7 @@ export default function Settings() {
   const [sideBarOpen, setsideBarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen bg-background text-foreground overflow-x-hidden">
       {sideBarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
@@ -23,21 +22,21 @@ export default function Settings() {
       )}
       <div
         className={`
-            fixed inset-y-0 left-0 z-50 w-100 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
+            fixed inset-y-0 left-0 z-50 w-50 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
             ${sideBarOpen ? "translate-x-0" : "-translate-x-full"}
             md:relative md:block md:transform-none md:translate-x-0 md:w-0
           `}
       >
-        <SideBar />
+        <SideBar onOpenLogin={() => setIsModalOpen(true)}/>
       </div>
-      <main className="flex-1 w-full">
+      <main className="left-0 w-full absolute top-0 h-full md:left-50 md:w-[calc(100%-200px)]">
         <LoginModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />
         <SearchBar onMenuClick={() => setsideBarOpen(!sideBarOpen)} />
         <div className="w-full py-10">
-          <div className="max-w-267.5 w-full mx-auto px-6 md:pr-6 md:pl-56">
+          <div className="max-w-267.5 w-full mx-auto px-6">
             <div className="text-left border-b border-[#e1e7ea] pb-4 font-bold text-[32px] text-primary mb-8">
               Settings
             </div>

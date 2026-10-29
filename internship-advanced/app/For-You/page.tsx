@@ -3,6 +3,7 @@
 import SideBar from "@/Components/sidebar";
 import SearchBar from "@/Components/searchbar";
 import BookSlider from "@/Components/bookSlider";
+import LoginModal from "@/Components/loginModal";
 import Link from "next/link";
 import { useAudioDuration } from "@/Components/audioDuration";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export default function ForYou() {
   const { duration } = useAudioDuration(selectedBook.audioLink);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [sideBarOpen, setsideBarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function getSelectedBook() {
     const response = await fetch(
@@ -49,7 +51,7 @@ export default function ForYou() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen bg-background text-foreground overflow-x-hidden">
       {sideBarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
@@ -58,16 +60,20 @@ export default function ForYou() {
       )}
       <div
         className={`
-        fixed inset-y-0 left-0 z-50 w-100 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 w-50 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
         ${sideBarOpen ? "translate-x-0" : "-translate-x-full"}
         md:relative md:block md:transform-none md:translate-x-0
       `}
       >
-        <SideBar />
+        <SideBar onOpenLogin={() => setIsModalOpen(true)}/>
       </div>
-      <main className="flex-1 w-full">
+      <main className="left-0 w-full absolute top-0 h-full md:left-50 md:w-[calc(100%-200px)]">
+        <LoginModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                />
         <SearchBar onMenuClick={() => setsideBarOpen(!sideBarOpen)} />
-        <div className="max-w-267.5 w-full mx-auto px-6 md:pr-6 md:pl-56">
+        <div className="max-w-267.5 w-full mx-auto px-6">
           <div className="w-full py-10">
             <div>
               <div className="text-[22px] font-bold text-primary mb-4">

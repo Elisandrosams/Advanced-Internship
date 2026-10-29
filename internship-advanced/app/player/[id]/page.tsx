@@ -38,7 +38,7 @@ export default function Player() {
   }, [bookId]);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen bg-background text-foreground overflow-x-hidden">
       {sideBarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
@@ -47,21 +47,21 @@ export default function Player() {
       )}
       <div
         className={`
-        fixed inset-y-0 left-0 z-50 w-100 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 w-50 bg-[#F7FAF9] transform transition-transform duration-300 ease-in-out
         ${sideBarOpen ? "translate-x-0" : "-translate-x-full"}
         md:relative md:block md:transform-none md:translate-x-0 md:w-0
       `}
       >
-        <SideBar />
+        <SideBar onOpenLogin={() => setIsModalOpen(true)}/>
       </div>
-      <main className="flex-1 w-full">
+      <main className="left-0 w-full absolute top-0 h-full md:left-50 md:w-[calc(100%-200px)]">
         <SearchBar onMenuClick={() => setsideBarOpen(!sideBarOpen)} />
         <LoginModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />
         <div className="relative w-full overflow-y-auto h-[calc(100vh-185px)]">
-          <div className="whitespace-pre-line py-6 px-6 md:pr-6 md:pl-43 max-w-200 mx-auto">
+          <div className="whitespace-pre-line py-6 px-6 max-w-200 mx-auto">
             {!book?.title ? (
               <div className="flex h-64 w-full items-center justify-center">
                 <svg

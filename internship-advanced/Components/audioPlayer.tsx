@@ -90,7 +90,7 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => setIsPlaying(false)}
       />
-      <div className="flex gap-3 w-[calc(100%/3)]">
+      <div className="flex gap-3 w-full justify-center md:w-[calc(100%/3)]">
         <figure className="flex max-w-12">
           <figure className="w-12 h-12 min-w-12">
             {isImageLoading && (
@@ -119,7 +119,7 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
           )}
         </div>
       </div>
-      <div className="w-[calc(100%/3)]">
+      <div className="w-full md:w-[calc(100%/3)]">
         <div className="flex items-center justify-center gap-6">
           <button onClick={skipBack} className="cursor-pointer">
             <svg
@@ -174,7 +174,7 @@ export default function audioPlayer({ book }: CustomPlayerProps) {
           </button>
         </div>
       </div>
-      <div className="flex gap-4 items-center w-[calc(100%/3)]">
+      <div className="flex gap-4 items-center w-full max-w-xs md:w-[calc(100%/3)]">
         <span className="w-10 text-left select-none text-white">
           {formatTime(currentTime)}
         </span>

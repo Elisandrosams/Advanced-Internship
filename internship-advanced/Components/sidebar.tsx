@@ -2,28 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import LoginModal from "@/Components/loginModal";
 import { useAuth } from "@/context/AuthContext";
 
-export default function SideBar() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface SideBarProps {
+  onOpenLogin: () => void;
+}
+
+export default function SideBar({ onOpenLogin }: SideBarProps) {
   const { user, logout } = useAuth();
   const { fontSize, setFontSize } = useAuth();
   const pathname = usePathname();
-
   const isForYou = pathname === "/For-You";
   const isLibrary = pathname === "/Library";
   const isSettings = pathname === "/Settings";
   const isPlayer = pathname.startsWith("/player/");
 
   const signIn = () => {
-    setIsModalOpen(true);
+    onOpenLogin()
   };
   const signOut = async () => {
     try {
       await logout();
-      setIsModalOpen(false);
     } catch (error) {
       console.error("Failed to log out", error);
     }
@@ -31,7 +30,6 @@ export default function SideBar() {
 
   return (
     <>
-      <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="bg-[#F7FAF9] w-50 min-w-50 fixed top-0 left-0 h-screen z-10">
         <div className="flex items-center justify-center h-15 pt-4 max-w-40 mx-auto">
           <img src="/logo.png" className="w-full h-10" />
